@@ -2,12 +2,14 @@
 let express = require('express');
 let apiRoutes = require('./src/routes/router');
 let mongoose = require('mongoose');
+require('./src/config/config')
 
 // Start de la app
 let app = express();
 
 // Aca el Body Parser para parsear los requests
 app.use(express.urlencoded({ extended: false }));
+
 
 app.use(express.json());
 
