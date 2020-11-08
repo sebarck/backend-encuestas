@@ -1,5 +1,5 @@
-//Dentro de esta carpeta, se van a poner todos los controladores o ruteos.
-//Cada entidad va ser una colección dentro de la base de datos
+//Se separan todos los routers de los componententes de las APIs por recursos
+//Para este caso, es el recruso usuario
 
 
 const router = require('express').Router();
@@ -11,5 +11,9 @@ router.route('/usuario')
     .post(usuarioController.add)
     .get(usuarioController.list)
 
+router.route('/usuario/:id')
+    .get(usuarioController.getOne)
 
+
+    
 module.exports = router;

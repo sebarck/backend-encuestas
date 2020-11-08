@@ -55,3 +55,21 @@ exports.list = function (req,res) {
        
     })
 }
+
+exports.getOne = function (req, res) {
+    let id = req.params.id;
+    Usuario.findById(id, (err, usuario) => {
+        
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err: err
+            });
+        }
+        
+        res.json({
+            ok: true,
+            usuario
+        })
+    })
+}
