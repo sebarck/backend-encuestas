@@ -1,21 +1,8 @@
-// Inicializo express router
-let router = require('express').Router();
+const express = require('express')
 
-// Defaulteo la respuesta
-router.get('/', function (req, res) {
-    res.json({
-        status: '200',
-        message: 'Anduvo'
-    });
-});
+const app = express()
 
-//Importo el controlador de encuestas
-var encuestaController = require('../controller/encuestaController');
+app.use(require('./encuesta'))
+app.use(require('./usuario'))
 
-// Encuesta routes
-router.route('/encuestas')
-    .get(encuestaController.list)
-    .post(encuestaController.add);
-
-// Exportar API Routes
-module.exports = router;
+module.exports = app
