@@ -2,7 +2,7 @@
 let express = require('express');
 let apiRoutes = require('./src/routes/router');
 let mongoose = require('mongoose');
-let  cors = require('cors');
+let cors = require('cors');
 var cookieParser = require('cookie-parser');
 require('./src/config/config')
 
@@ -13,41 +13,27 @@ let app = express();
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Access-Control-Allow-Origin');
+  if ('OPTIONS' == req.method) {
+    res.send(200);
+  }
+  else {
+    next();
+  }
+});
+app.options('*', cors());
 // Aca uso el API Routes
 app.use('/api/v1', apiRoutes);
 //Encabezados para HTTP
 
 //Utilización de CORS
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
-
-app.use(cors());
-
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-    // intercept OPTIONS method
-    if ('OPTIONS' == req.method) {
-      res.send(200);
-    }
-    else {
-      next();
-    }
-};
-app.use(allowCrossDomain);
-
-
-/*
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, Access-Control-Allow-Request-Method');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Acept', 'text/html,application/xhtml+xml,application/xml')
-    next();
-  }); 
-*/
 // Asignacion de puerto
 var port = process.env.PORT || 8080;
 
@@ -61,12 +47,12 @@ const options = { useNewUrlParser: true, useUnifiedTopology: true }
 const mongo = mongoose.connect(uri, options);
 
 mongo.then(() => {
-    console.log('Conectado a Mongo');
+  console.log('Conectado a Mongo');
 }, error => {
-    console.log(error, 'Error en la conexion');
+  console.log(error, 'Error en la conexion');
 })
 
 // Deployar la app en el puerto configurado
 app.listen(port, function () {
-    console.log("Corriendo backend de encuestas en puerto " + port);
+  console.log("Corriendo backend de encuestas en puerto " + port);
 })
