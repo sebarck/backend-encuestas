@@ -17,20 +17,28 @@ exports.list = function (req, res) {
 
 exports.add = function (req, res) {
     console.log(req.body);
+
     var encuesta = new Encuesta();
     encuesta.poll_title = req.body.poll_title;
     encuesta.poll_state = req.body.poll_state;
     encuesta.description = req.body.description;
-    encuesta.created = req.body.created;
-    encuesta.modified = req.body.modified;
+    encuesta.createdAt = req.body.created;
+    encuesta.modifiedAt = req.body.modified;
     encuesta.questions = req.body.questions;
 
-    encuesta.save(function (err) {
-        if (err)
-            res.json(err)
+    encuesta.save((err) => {
+        if (err) {
+            console.log((err));
+            return (
+                res.status(400).json({
+                    ok: false,
+                    err: err
+                }))
+        }
         res.json({
+            ok: true,
             message: "Encuesta guardada correctamente!",
             data: encuesta
-        });
-    });
+        })
+    })
 }
