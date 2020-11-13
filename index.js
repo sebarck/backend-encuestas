@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
 app.all('/*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", process.env.ORIGIN);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Access-Control-Allow-Origin');
   if ('OPTIONS' == req.method) {
@@ -31,18 +31,14 @@ app.use('/api/v1', apiRoutes);
 
 //Utilización de CORS
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: process.env.ORIGIN
 }));
-
-// Asignacion de puerto
-var port = process.env.PORT || 8080;
-
 
 // Hola mundo en el base
 app.get('/', (req, res) => res.send('Backend de encuestas v1.0.0'));
 
 // Conectar Mongoose con Mongo Atlas
-const uri = 'mongodb+srv://backendEncuestasUser:ItaliaRoma.01!@cluster0.ftjms.mongodb.net/backend_encuestas?retryWrites=true&w=majority';
+const uri = process.env.URL_DB;
 const options = { useNewUrlParser: true, useUnifiedTopology: true }
 const mongo = mongoose.connect(uri, options);
 
@@ -53,6 +49,6 @@ mongo.then(() => {
 })
 
 // Deployar la app en el puerto configurado
-app.listen(port, function () {
+app.listen(process.env.PORT, function () {
   console.log("Corriendo backend de encuestas en puerto " + port);
 })
