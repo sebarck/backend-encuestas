@@ -16,11 +16,12 @@ exports.list = function (req, res) {
 };
 
 exports.add = function (req, res) {
-    console.log(req.body);
+    console.log(JSON.stringify(req.body))
 
     var encuesta = new Encuesta();
+    console.log(req.body);
     encuesta.poll_title = req.body.poll_title;
-    encuesta.poll_state = req.body.poll_state;
+    encuesta.state = req.body.state;
     encuesta.description = req.body.description;
     encuesta.createdAt = req.body.created;
     encuesta.modifiedAt = req.body.modified;

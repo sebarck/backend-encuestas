@@ -7,7 +7,7 @@ var encuestaSchema = mongoose.Schema({
         required: true,
         defaut: 'Un valor'
     },
-    poll_state: {
+    state: {
         type: String, 
         required: true 
     },
