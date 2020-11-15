@@ -13,9 +13,7 @@ router.route('/usuario')
 
 router.route('/usuario/:id')
     .get(usuarioController.getOne)
+    .delete(usuarioController.deleteUser)
+    .put(usuarioController.updateById)  
 
-router.route('/usuario/:id')
-    .put(usuarioController.updateById)
-    
-    
 module.exports = router;

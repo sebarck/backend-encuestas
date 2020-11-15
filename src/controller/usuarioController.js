@@ -1,6 +1,7 @@
 const Usuario = require('../models/usuarioModel')
 const bcrypt = require('bcrypt')
 const { Mongoose } = require('mongoose')
+const _ = require('underscore')
 
 
 exports.add = function (req, res) {
@@ -98,4 +99,27 @@ exports.updateById = function (req, res) {
             })
         })
     
+}
+
+exports.deleteUser =  function (req, res) {
+    let id = req.params.id
+    Usuario.findByIdAndUpdate(id,{'estado': false}, {
+            new: true, 
+            runValidators: true,
+            context: 'query'
+        }, (err, usuarioDB) => {
+        
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err: err
+                });
+            }
+        
+            res.json({
+                ok: true,
+                usuario: usuarioDB
+            })
+
+    })
 }

@@ -15,7 +15,14 @@ var encuestaController = require('../controller/encuestaController');
 // Encuesta routes
 router.route('/encuestas')
     .get(encuestaController.list)
-    .post(encuestaController.add);
+    .post(encuestaController.add)
+
+
+router.route('/encuestas/:id')
+    .get(encuestaController.getOne)
+    .put(encuestaController.update)
+    .delete(encuestaController.delete)
+
 
 // Exportar API Routes
 module.exports = router;

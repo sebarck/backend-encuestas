@@ -1,4 +1,4 @@
-Encuesta = require('../models/encuestaModel');
+const Encuesta = require('../models/encuestaModel');
 
 exports.list = function (req, res) {
     Encuesta.get(function (err, encuesta) {
@@ -14,6 +14,58 @@ exports.list = function (req, res) {
         });
     });
 };
+
+exports.get = function (req,res) {
+    const id = req.params.id
+    Encuesta.findById(id, (err, encuestaDB) => {
+        if (err) {
+            return (
+                res.status(400).json({
+                    ok: false,
+                    err: err 
+                })
+            )
+        }
+
+        res.json({
+            ok: true,
+            encueta: encuestaDB
+        })
+
+    })
+}
+
+exports.getOne = function (req, res) {
+    const id = req.params.id
+    
+
+    Encuesta.findById(id, (err,encuestaDB) => {
+        if (err) {
+            return (
+                res.status(400).json({
+                    ok: false,
+                    err: err 
+                })
+         
+            )
+        }
+
+        if (!encuestaDB){
+            return (
+                res.status(404).json({
+                    ok: false,
+                    err: "No se encontré la encuesta buscada"
+                })
+            )
+        }
+
+        res.json({
+            ok: true,
+            encuesta: encuestaDB
+        })
+    })
+}
+
 
 exports.add = function (req, res) {
     console.log(JSON.stringify(req.body))
@@ -41,5 +93,48 @@ exports.add = function (req, res) {
             message: "Encuesta guardada correctamente!",
             data: encuesta
         })
+    })
+}
+
+exports.update = function (req,res) {
+    const id = req.params.id
+
+    Usuario.findByIdAndUpdate(id, body, {
+        new: true, 
+        runValidators: true,
+        context: 'query'
+    }, (err, encuestaDB) => {
+    
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err: err
+            });
+        }
+    
+        res.json({
+            ok: true,
+            encuesta: encuestaDB
+        })
+    })
+}
+
+exports.delete = function(req,res) {
+    const id = req.params.id
+    Encuesta.findByIdAndUpdate(id, {state: false}, (err,encuesta) => {
+        if(err) {
+            return (
+                res.status(400).json({
+                    ok: false,
+                    err: err
+                })
+            )
+        }
+
+        res.json({
+            ok: true,
+            encuesta: encuesta
+        })
+
     })
 }
