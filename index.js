@@ -50,5 +50,5 @@ mongo.then(() => {
 
 // Deployar la app en el puerto configurado
 app.listen(process.env.PORT, function () {
-  console.log("Corriendo backend de encuestas en puerto " + port);
+  console.log("Corriendo backend de encuestas en puerto " + process.env.PORT);
 })

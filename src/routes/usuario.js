@@ -14,6 +14,8 @@ router.route('/usuario')
 router.route('/usuario/:id')
     .get(usuarioController.getOne)
 
-
+router.route('/usuario/:id')
+    .put(usuarioController.updateById)
+    
     
 module.exports = router;

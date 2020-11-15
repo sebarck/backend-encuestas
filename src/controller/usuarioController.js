@@ -73,3 +73,29 @@ exports.getOne = function (req, res) {
         })
     })
 }
+
+exports.updateById = function (req, res) {
+    let id = req.params.id;
+    let body = _.pick(req.body, ['nombre','email','role','password']); 
+    body.password = bcrypt.hashSync(body.password,10),
+
+    Usuario.findByIdAndUpdate(id, body, {
+            new: true, 
+            runValidators: true,
+            context: 'query'
+        }, (err, usuarioDB) => {
+        
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err: err
+                });
+            }
+        
+            res.json({
+                ok: true,
+                usuario: usuarioDB
+            })
+        })
+    
+}
