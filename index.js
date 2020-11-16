@@ -2,6 +2,8 @@
 let express = require('express');
 let apiRoutes = require('./src/routes/router');
 let mongoose = require('mongoose');
+let cors = require('cors');
+var cookieParser = require('cookie-parser');
 require('./src/config/config')
 
 // Start de la app
@@ -10,30 +12,43 @@ let app = express();
 // Aca el Body Parser para parsear los requests
 app.use(express.urlencoded({ extended: false }));
 
-
 app.use(express.json());
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", process.env.ORIGIN);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Access-Control-Allow-Origin');
+  if ('OPTIONS' == req.method) {
+    res.sendStatus(200);
+  }
+  else {
+    next();
+  }
+});
+app.options('*', cors());
+// Aca uso el API Routes
+app.use('/api/v1', apiRoutes);
+//Encabezados para HTTP
 
-// Asignacion de puerto
-var port = process.env.PORT || 8080;
+//Utilización de CORS
+app.use(cors({
+  origin: process.env.ORIGIN
+}));
 
 // Hola mundo en el base
 app.get('/', (req, res) => res.send('Backend de encuestas v1.0.0'));
 
-// Aca uso el API Routes
-app.use('/api/v1', apiRoutes);
-
 // Conectar Mongoose con Mongo Atlas
-const uri = 'mongodb+srv://backendEncuestasUser:ItaliaRoma.01!@cluster0.ftjms.mongodb.net/backend_encuestas?retryWrites=true&w=majority';
+const uri = process.env.URL_DB;
 const options = { useNewUrlParser: true, useUnifiedTopology: true }
 const mongo = mongoose.connect(uri, options);
 
 mongo.then(() => {
-    console.log('Conectado a Mongo');
+  console.log('Conectado a Mongo');
 }, error => {
-    console.log(error, 'Error en la conexion');
+  console.log(error, 'Error en la conexion');
 })
 
 // Deployar la app en el puerto configurado
-app.listen(port, function () {
-    console.log("Corriendo backend de encuestas en puerto " + port);
+app.listen(process.env.PORT, function () {
+  console.log("Corriendo backend de encuestas en puerto " + process.env.PORT);
 })

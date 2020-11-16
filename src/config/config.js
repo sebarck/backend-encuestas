@@ -9,14 +9,21 @@ process.env.PORT = process.env.PORT || 8080
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev'
 
 // ======================
+// origin
+// ======================
+process.env.ORIGIN = process.env.ORIGIN || 'http://localhost:3000'
+
+
+// ======================
 // Base de datos
 // ======================
 let urlDB;
 if ( process.env.NODE_ENV === 'dev') {
-    urlDB = 'mongodb+srv://sr-udemy-node:pass-udemy-node@cluster0.ynodx.mongodb.net/usr-udemy-node?retryWrites=true&w=majority'
+    urlDB = 'mongodb+srv://backendEncuestasUser:ItaliaRoma.01!@cluster0.ftjms.mongodb.net/backend_encuestas?retryWrites=true&w=majority'
+
 } 
 else {
-    urlDB = 'mongodb+srv://sr-udemy-node:pass-udemy-node@cluster0.ynodx.mongodb.net/usr-udemy-node?retryWrites=true&w=majority'
+    urlDB = 'mongodb+srv://backendEncuestasUser:ItaliaRoma.01!@cluster0.ftjms.mongodb.net/backend_encuestas?retryWrites=true&w=majority'
 }
 process.env.URL_DB = urlDB
 
