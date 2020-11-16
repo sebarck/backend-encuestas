@@ -19,8 +19,6 @@ exports.login = function(req,res) {
         })
     }
 
-    console.log(body)
-
     Usuario.findOne({email: body.email}, (err,usuarioDB) => {
         if (err) {
             return res.status(500).json({

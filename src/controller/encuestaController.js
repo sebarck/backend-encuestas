@@ -68,12 +68,10 @@ exports.getOne = function (req, res) {
 
 
 exports.add = function (req, res) {
-    console.log(JSON.stringify(req.body))
 
     var encuesta = new Encuesta();
-    console.log(req.body);
     encuesta.poll_title = req.body.poll_title;
-    encuesta.state = req.body.state;
+    encuesta.state = req.body.poll_state;
     encuesta.description = req.body.description;
     encuesta.createdAt = req.body.created;
     encuesta.modifiedAt = req.body.modified;
@@ -98,8 +96,9 @@ exports.add = function (req, res) {
 
 exports.update = function (req,res) {
     const id = req.params.id
-
-    Usuario.findByIdAndUpdate(id, body, {
+    body = req.body
+    
+    Encuesta.findByIdAndUpdate(id, body, {
         new: true, 
         runValidators: true,
         context: 'query'
