@@ -59,7 +59,7 @@ exports.login = function(req,res) {
         res.json({
             ok: true,
             usuario: usuarioDB,
-            token
+            token: 'bearer ' + token
         })
     })
 }
