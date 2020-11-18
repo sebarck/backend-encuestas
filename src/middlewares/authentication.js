@@ -5,14 +5,16 @@ const jwt =  require('jsonwebtoken')
 //=======================
 
 let verificaToken = (req, res, next) => {
-    let authentication = req.get('Authorization')
-    let token = authentication.split( ' ')[1]
+    let authorization = req.get('Authorization')
+    let token = authorization.split( ' ')[1]
     jwt.verify(token,process.env.SEED,(err,decode) => {
         if (err) {
+            console.log(err)
             return res.status(401).json({
                 ok: false,
                 err: {
-                    message: 'Token no válido'
+                    message: 'Token no válido',
+                    err: err
                 }
             })
         }

@@ -1,8 +1,8 @@
 const Encuesta = require('../models/encuestaModel');
 const ObjectId = require('../models/usuarioModel').ObjectId
 exports.list = function (req, res) {
-
-    Encuesta.find({poll_state: "true"})
+    console.log(req.usuario)
+    Encuesta.find({poll_state: "true", usuario_id: req.usuario._id})
         .exec((err, encuestas) => {
         if (err) {
             return (res.status(400).json({
