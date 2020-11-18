@@ -51,15 +51,13 @@ exports.login = function(req,res) {
                     message: 'Error al recuperar la clave'
                 })
         }
-
         let token = jwt.sign({
             usuario: usuarioDB
-        }, process.env.SEED, {expiresIn: process.env.CADUCIDAD_TOKEN})
-
+        }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN})
         res.json({
             ok: true,
             usuario: usuarioDB,
-            token
+            token: 'bearer ' + token
         })
     })
 }

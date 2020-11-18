@@ -1,16 +1,19 @@
 const Encuesta = require('../models/encuestaModel');
-
+const ObjectId = require('../models/usuarioModel').ObjectId
 exports.list = function (req, res) {
-    Encuesta.get(function (err, encuesta) {
-        if (err)
-            res.json({
-                status: "error",
-                message: err
-            });
+    console.log(req.usuario)
+    Encuesta.find({poll_state: "true", usuario_id: req.usuario._id})
+        .exec((err, encuestas) => {
+        if (err) {
+            return (res.status(400).json({
+                ok: "error",
+                err: err
+            }))
+        }
         res.json({
-            status: "success",
+            ok: true,
             message: "Llamada con exito!",
-            data: encuesta
+            data: encuestas
         });
     });
 };
@@ -70,12 +73,14 @@ exports.getOne = function (req, res) {
 exports.add = function (req, res) {
 
     var encuesta = new Encuesta();
+    encuesta.usuario_id = req.body.usuario_id
     encuesta.poll_title = req.body.poll_title;
-    encuesta.state = req.body.poll_state;
+    encuesta.poll_state = req.body.poll_state;
     encuesta.description = req.body.description;
     encuesta.createdAt = req.body.created;
     encuesta.modifiedAt = req.body.modified;
     encuesta.questions = req.body.questions;
+
 
     encuesta.save((err) => {
         if (err) {

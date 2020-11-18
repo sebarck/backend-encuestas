@@ -2,12 +2,16 @@ var mongoose = require('mongoose');
 
 // Creo el esquema
 var encuestaSchema = mongoose.Schema({
+    usuario_id: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Usuario'
+    },
     poll_title: { 
         type: String, 
         required: true,
         defaut: 'Un valor'
     },
-    state: {
+    poll_state: {
         type: String, 
         required: true 
     },
