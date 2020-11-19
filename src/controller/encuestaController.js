@@ -40,8 +40,6 @@ exports.get = function (req,res) {
 
 exports.getOne = function (req, res) {
     const id = req.params.id
-    
-
     Encuesta.findById(id, (err,encuestaDB) => {
         if (err) {
             return (
@@ -125,7 +123,7 @@ exports.update = function (req,res) {
 
 exports.delete = function(req,res) {
     const id = req.params.id
-    Encuesta.findByIdAndUpdate(id, {state: false}, (err,encuesta) => {
+    Encuesta.findByIdAndUpdate(id, {poll_state: 'false'}, (err,encuesta) => {
         if(err) {
             return (
                 res.status(400).json({
