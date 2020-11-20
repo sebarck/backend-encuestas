@@ -1,36 +1,142 @@
-Encuesta = require('../models/encuestaModel');
-
+const Encuesta = require('../models/encuestaModel');
+const ObjectId = require('../models/usuarioModel').ObjectId
 exports.list = function (req, res) {
-    Encuesta.get(function (err, encuesta) {
-        if (err)
-            res.json({
-                status: "error",
-                message: err
-            });
+    console.log(req.usuario)
+    Encuesta.find({poll_state: "true", usuario_id: req.usuario._id})
+        .exec((err, encuestas) => {
+        if (err) {
+            return (res.status(400).json({
+                ok: "error",
+                err: err
+            }))
+        }
         res.json({
-            status: "success",
+            ok: true,
             message: "Llamada con exito!",
-            data: encuesta
+            data: encuestas
         });
     });
 };
 
+exports.get = function (req,res) {
+    const id = req.params.id
+    Encuesta.findById(id, (err, encuestaDB) => {
+        if (err) {
+            return (
+                res.status(400).json({
+                    ok: false,
+                    err: err 
+                })
+            )
+        }
+
+        res.json({
+            ok: true,
+            encueta: encuestaDB
+        })
+
+    })
+}
+
+exports.getOne = function (req, res) {
+    const id = req.params.id
+    Encuesta.findById(id, (err,encuestaDB) => {
+        if (err) {
+            return (
+                res.status(400).json({
+                    ok: false,
+                    err: err 
+                })
+         
+            )
+        }
+
+        if (!encuestaDB){
+            return (
+                res.status(404).json({
+                    ok: false,
+                    err: "No se encontré la encuesta buscada"
+                })
+            )
+        }
+
+        res.json({
+            ok: true,
+            encuesta: encuestaDB
+        })
+    })
+}
+
+
 exports.add = function (req, res) {
-    console.log(req.body);
+
     var encuesta = new Encuesta();
+    encuesta.usuario_id = req.body.usuario_id
     encuesta.poll_title = req.body.poll_title;
     encuesta.poll_state = req.body.poll_state;
     encuesta.description = req.body.description;
-    encuesta.created = req.body.created;
-    encuesta.modified = req.body.modified;
+    encuesta.createdAt = req.body.created;
+    encuesta.modifiedAt = req.body.modified;
     encuesta.questions = req.body.questions;
 
-    encuesta.save(function (err) {
-        if (err)
-            res.json(err)
+
+    encuesta.save((err) => {
+        if (err) {
+            console.log((err));
+            return (
+                res.status(400).json({
+                    ok: false,
+                    err: err
+                }))
+        }
         res.json({
+            ok: true,
             message: "Encuesta guardada correctamente!",
             data: encuesta
-        });
-    });
+        })
+    })
+}
+
+exports.update = function (req,res) {
+    const id = req.params.id
+    body = req.body
+    
+    Encuesta.findByIdAndUpdate(id, body, {
+        new: true, 
+        runValidators: true,
+        context: 'query'
+    }, (err, encuestaDB) => {
+    
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err: err
+            });
+        }
+    
+        res.json({
+            ok: true,
+            encuesta: encuestaDB
+        })
+    })
+}
+
+exports.delete = function(req,res) {
+    const id = req.params.id
+    Encuesta.findByIdAndUpdate(id, {poll_state: 'false'}, (err,encuesta) => {
+        if(err) {
+            return (
+                res.status(400).json({
+                    ok: false,
+                    err: err
+                })
+            )
+        }
+
+        res.json({
+            ok: true,
+            encuesta: encuesta
+        })
+
+    })
 }

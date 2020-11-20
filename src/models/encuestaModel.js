@@ -2,12 +2,31 @@ var mongoose = require('mongoose');
 
 // Creo el esquema
 var encuestaSchema = mongoose.Schema({
-    _id: { type: String },
-    poll_title: { type: String, required: true },
-    poll_state: { type: String, required: true },
-    description: { type: String, required: true },
-    created: { type: Date, default: Date.now },
-    modified: { type: Date },
+    usuario_id: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Usuario'
+    },
+    poll_title: { 
+        type: String, 
+        required: true,
+        defaut: 'Un valor'
+    },
+    poll_state: {
+        type: String, 
+        required: true 
+    },
+    description: { 
+        type: String, 
+        required: true 
+    },
+    createAt: { 
+        type: Date, 
+        default: Date.now
+    },
+    updateAt: { 
+        type: Date,
+        default: Date.now 
+    },
     questions: {
         total: Number,
         values: [{
@@ -16,8 +35,13 @@ var encuestaSchema = mongoose.Schema({
             q_type: String,
             value: String,
             mandatory: Boolean,
-            options: { type: Array, "default": [] },
-            filters: { type: Object, "default": {} },
+            options: { 
+                type: Array, 
+                default: [] },
+            filters: { 
+                type: Object, 
+                default: {} 
+            },
         }]
     }
 
