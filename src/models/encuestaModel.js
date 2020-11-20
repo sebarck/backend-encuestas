@@ -34,6 +34,7 @@ var encuestaSchema = mongoose.Schema({
             index: Number,
             q_type: String,
             value: String,
+            description: String,
             mandatory: Boolean,
             options: { 
                 type: Array, 
