@@ -3,7 +3,8 @@ let express = require('express');
 let apiRoutes = require('./src/routes/router');
 let mongoose = require('mongoose');
 let cors = require('cors');
-var cookieParser = require('cookie-parser');
+const swaggerUi = require('swagger-ui-express');
+swaggerDocument = require('./swagger.json');
 require('./src/config/config')
 
 // Start de la app
@@ -47,6 +48,8 @@ mongo.then(() => {
 }, error => {
   console.log(error, 'Error en la conexion');
 })
+
+app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Deployar la app en el puerto configurado
 app.listen(process.env.PORT, function () {
