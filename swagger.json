@@ -1,0 +1,129 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Backend API - Creador de encuestas",
+        "description": "API del backend de la web del creador de encuestas para el observatorio pyme",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:8000",
+    "basePath": "/api/v1",
+    "paths": {
+        "/usuario": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Recupera todos los usuarios de la plataforma",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Usuario"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "parameters": [
+                    {
+                        "name": "usuario",
+                        "in": "body",
+                        "description": "Usuario que querramos crear",
+                        "schema": {
+                            "$ref": "#/definitions/Usuario"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Para crear un nuevo usuario en la plataforma",
+                "responses": {
+                    "201": {
+                        "description": "OK - Usuario creado"
+                    }
+                }
+            }
+        },
+        "/usuario/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID del usuario que queremos buscar",
+                    "type": "integer"
+                }
+            ],
+            "put": {
+                "summary": "Actualizar un usuario existente",
+                "tags": [
+                    "Usuarios"
+                ],
+                "parameters": [
+                    {
+                        "name": "usuario",
+                        "in": "body",
+                        "description": "Usuario que querramos actualizar",
+                        "schema": {
+                            "$ref": "#/definitions/Usuario"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "Usuario": {
+            "required": [
+                "nombre",
+                "email",
+                "password",
+                "role",
+                "estado"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "estado": {
+                    "type": "boolean"
+                },
+                "nombre": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "ADMIN-ROLE",
+                        "USER_ROLE"
+                    ]
+                }
+            }
+        },
+        "Users": {
+            "type": "array",
+            "$ref": "#/definitions/User"
+        }
+    },
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ]
+}

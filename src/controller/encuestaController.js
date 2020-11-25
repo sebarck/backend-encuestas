@@ -2,30 +2,30 @@ const Encuesta = require('../models/encuestaModel');
 const ObjectId = require('../models/usuarioModel').ObjectId
 exports.list = function (req, res) {
     console.log(req.usuario)
-    Encuesta.find({poll_state: "true", usuario_id: req.usuario._id})
+    Encuesta.find({ poll_state: { $ne: "false" }, usuario_id: req.usuario._id })
         .exec((err, encuestas) => {
-        if (err) {
-            return (res.status(400).json({
-                ok: "error",
-                err: err
-            }))
-        }
-        res.json({
-            ok: true,
-            message: "Llamada con exito!",
-            data: encuestas
+            if (err) {
+                return (res.status(400).json({
+                    ok: "error",
+                    err: err
+                }))
+            }
+            res.json({
+                ok: true,
+                message: "Llamada con exito!",
+                data: encuestas
+            });
         });
-    });
 };
 
-exports.get = function (req,res) {
+exports.get = function (req, res) {
     const id = req.params.id
     Encuesta.findById(id, (err, encuestaDB) => {
         if (err) {
             return (
                 res.status(400).json({
                     ok: false,
-                    err: err 
+                    err: err
                 })
             )
         }
@@ -40,18 +40,18 @@ exports.get = function (req,res) {
 
 exports.getOne = function (req, res) {
     const id = req.params.id
-    Encuesta.findById(id, (err,encuestaDB) => {
+    Encuesta.findById(id, (err, encuestaDB) => {
         if (err) {
             return (
                 res.status(400).json({
                     ok: false,
-                    err: err 
+                    err: err
                 })
-         
+
             )
         }
 
-        if (!encuestaDB){
+        if (!encuestaDB) {
             return (
                 res.status(404).json({
                     ok: false,
@@ -73,7 +73,7 @@ exports.add = function (req, res) {
     var encuesta = new Encuesta();
     encuesta.usuario_id = req.body.usuario_id
     encuesta.poll_title = req.body.poll_title;
-    encuesta.poll_state = req.body.poll_state;
+    encuesta.poll_state = "BORRADOR";
     encuesta.description = req.body.description;
     encuesta.createdAt = req.body.created;
     encuesta.modifiedAt = req.body.modified;
@@ -97,23 +97,23 @@ exports.add = function (req, res) {
     })
 }
 
-exports.update = function (req,res) {
+exports.update = function (req, res) {
     const id = req.params.id
     body = req.body
-    
+
     Encuesta.findByIdAndUpdate(id, body, {
-        new: true, 
+        new: true,
         runValidators: true,
         context: 'query'
     }, (err, encuestaDB) => {
-    
+
         if (err) {
             return res.status(400).json({
                 ok: false,
                 err: err
             });
         }
-    
+
         res.json({
             ok: true,
             encuesta: encuestaDB
@@ -121,10 +121,10 @@ exports.update = function (req,res) {
     })
 }
 
-exports.delete = function(req,res) {
+exports.delete = function (req, res) {
     const id = req.params.id
-    Encuesta.findByIdAndUpdate(id, {poll_state: 'false'}, (err,encuesta) => {
-        if(err) {
+    Encuesta.findByIdAndUpdate(id, { poll_state: 'false' }, (err, encuesta) => {
+        if (err) {
             return (
                 res.status(400).json({
                     ok: false,
@@ -138,5 +138,49 @@ exports.delete = function(req,res) {
             encuesta: encuesta
         })
 
+    })
+}
+
+exports.publish = function (req, res) {
+    const id = req.params.id
+    Encuesta.findByIdAndUpdate(id, { $set: { poll_state: "PUBLICADA" } }, {
+        new: true,
+        runValidators: true,
+        context: 'query'
+    }, (err, encuestaDB) => {
+
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err: err
+            });
+        }
+
+        res.json({
+            ok: true,
+            encuesta: encuestaDB
+        })
+    })
+}
+
+exports.deactivate = function (req, res) {
+    const id = req.params.id
+    Encuesta.findByIdAndUpdate(id, { $set: { poll_state: "INACTIVA" } }, {
+        new: true,
+        runValidators: true,
+        context: 'query'
+    }, (err, encuestaDB) => {
+
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err: err
+            });
+        }
+
+        res.json({
+            ok: true,
+            encuesta: encuestaDB
+        })
     })
 }
