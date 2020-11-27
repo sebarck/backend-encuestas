@@ -21,6 +21,8 @@ router.route('/encuestas')
     .get(verificaToken, encuestaController.list)
     .post(verificaToken, encuestaController.add)
 
+router.route('/encuestas/todas')
+    .get(verificaToken, encuestaController.listAll)
 
 router.route('/encuestas/:id', verificaToken)
     .get(verificaToken, encuestaController.getOne)
