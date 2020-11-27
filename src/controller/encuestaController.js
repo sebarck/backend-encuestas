@@ -1,7 +1,6 @@
 const Encuesta = require('../models/encuestaModel');
 const ObjectId = require('../models/usuarioModel').ObjectId
 exports.list = function (req, res) {
-    console.log(req.usuario)
     Encuesta.find({ poll_state: { $ne: "false" }, usuario_id: req.usuario._id })
         .exec((err, encuestas) => {
             if (err) {
@@ -19,7 +18,6 @@ exports.list = function (req, res) {
 };
 
 exports.listAll = function (req, res) {
-    console.log(req.usuario)
     Encuesta.find({ poll_state: { $ne: "false" }})
         .exec((err, encuestas) => {
             if (err) {
