@@ -18,6 +18,24 @@ exports.list = function (req, res) {
         });
 };
 
+exports.listAll = function (req, res) {
+    console.log(req.usuario)
+    Encuesta.find({ poll_state: { $ne: "false" }})
+        .exec((err, encuestas) => {
+            if (err) {
+                return (res.status(400).json({
+                    ok: "error",
+                    err: err
+                }))
+            }
+            res.json({
+                ok: true,
+                message: "Llamada con exito!",
+                data: encuestas
+            });
+        });
+};
+
 exports.get = function (req, res) {
     const id = req.params.id
     Encuesta.findById(id, (err, encuestaDB) => {
